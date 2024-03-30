@@ -1,5 +1,6 @@
 """Default parameters for an evolutionary algorithm."""
 
+import random as _random
 from ..._utilities.parametrization import ParameterCollection as _ParameterCollection
 
 
@@ -9,6 +10,7 @@ default_parameters = _ParameterCollection(
         population_size=100,
         offspring_size=100,
         verbose=False,
+        rng=_random.Random(),
         # Storage
         database_on=False,
         database_location=":memory:",

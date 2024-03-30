@@ -1,4 +1,3 @@
-import random as _random
 from functools import lru_cache as _lru_cache
 from math import isfinite as _isfinite
 from math import isnan as _isnan
@@ -17,7 +16,7 @@ def uniform(individuals, sample_size, objective, parameters, state):
     - Eiben, Introduction to Evolutionary Computing (2e 2015): p. 86
 
     """
-    sel_inds = _uniform_sampling_with_replacement(individuals, sample_size)
+    sel_inds = _uniform_sampling_with_replacement(individuals, sample_size, parameters)
     return sel_inds
 
 
@@ -60,7 +59,7 @@ def tournament(individuals, sample_size, objective, parameters, state):
     sel_inds = []
     if objective == "min":
         for _ in range(sample_size):
-            competitors = _uniform_sampling_with_replacement(individuals, ts)
+            competitors = _uniform_sampling_with_replacement(individuals, ts, parameters)
             winner = competitors[0]
             for competitor in competitors[1:]:
                 if competitor.less_than(winner, objective):
@@ -68,7 +67,7 @@ def tournament(individuals, sample_size, objective, parameters, state):
             sel_inds.append(winner)
     else:
         for _ in range(sample_size):
-            competitors = _uniform_sampling_with_replacement(individuals, ts)
+            competitors = _uniform_sampling_with_replacement(individuals, ts, parameters)
             winner = competitors[0]
             for competitor in competitors[1:]:
                 if competitor.greater_than(winner, objective):
@@ -89,7 +88,7 @@ def rank_proportional(individuals, sample_size, objective, parameters, state):
     probabilities = _calculate_rank_probabilities(num_inds, mu, eta_plus)
 
     # Sampling
-    sel_inds = _stochastic_universal_sampling(srt_inds, probabilities, sample_size)
+    sel_inds = _stochastic_universal_sampling(srt_inds, probabilities, sample_size, parameters)
     return sel_inds
 
 
@@ -115,7 +114,7 @@ def fitness_proportional(individuals, sample_size, objective, parameters, state)
     probabilities = _calculate_fitness_probabilities(scaled_fitnesses, usage_tracking)
 
     # Sampling
-    sel_inds = _stochastic_universal_sampling(individuals, probabilities, sample_size)
+    sel_inds = _stochastic_universal_sampling(individuals, probabilities, sample_size, parameters)
     return sel_inds
 
 
@@ -231,13 +230,13 @@ def _sort_individuals(individuals, reverse=False):
 # Sampling algorithms: draw individuals from a population according to a probability distribution
 
 
-def _uniform_sampling_with_replacement(population, sample_size):
+def _uniform_sampling_with_replacement(population, sample_size, paremeters):
     """Uniform sampling with replacement."""
-    selected_individuals = [_random.choice(population) for _ in range(sample_size)]
+    selected_individuals = [parameters["rng"].choice(population) for _ in range(sample_size)]
     return selected_individuals
 
 
-def _stochastic_universal_sampling(population, probabilities, sample_size):
+def _stochastic_universal_sampling(population, probabilities, sample_size, parameters):
     """Stochastic universal sampling (SUS) for drawing individuals from a probability distribution.
 
     A sampling algorithm by James Baker, designed as improvement to roulette wheel sampling.
@@ -251,7 +250,7 @@ def _stochastic_universal_sampling(population, probabilities, sample_size):
     lambda_inv = 1.0 / sample_size
 
     # Draw from uniform distribution
-    rand_uniform = _random.uniform(0.0, lambda_inv)
+    rand_uniform = parameters["rng"].uniform(0.0, lambda_inv)
 
     # Decide which individual gets how many children (=copies of itself)
     num_children = []

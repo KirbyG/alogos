@@ -1,13 +1,11 @@
 """Crossover functions for CFG-GP."""
 
-import random as _random
-
 from ..._utilities.parametrization import get_given_or_default as _get_given_or_default
 from . import default_parameters as _default_parameters
 from . import representation as _representation
 
 
-def subtree_exchange(grammar, genotype1, genotype2, parameters=None):
+def subtree_exchange(grammar, genotype1, genotype2, parameters):
     """Generate new CFG-GP genotypes by exchanging suitable subtrees.
 
     Randomly select nodes containing the same nonterminal in two trees
@@ -74,6 +72,7 @@ def subtree_exchange(grammar, genotype1, genotype2, parameters=None):
     """
     # Parameter extraction
     max_depth = _get_given_or_default("max_depth", parameters, _default_parameters)
+    rng = _get_given_or_default("rng", parameters, _default_parameters)
 
     # Argument processing
     if not isinstance(genotype1, _representation.Genotype):
@@ -89,10 +88,10 @@ def subtree_exchange(grammar, genotype1, genotype2, parameters=None):
     si = s1.intersection(s2)
     if si:
         # Randomly select a non-terminal in the first tree, which is also part of second tree
-        n1 = _random.choice([n for n in ns1 if n.symbol.text in si])
+        n1 = rng.choice([n for n in ns1 if n.symbol.text in si])
         t1 = n1.symbol.text
         # Randomly select the same non-terminal in the second genotype
-        n2 = _random.choice([n for n in ns2 if n.symbol.text == t1])
+        n2 = rng.choice([n for n in ns2 if n.symbol.text == t1])
         # Swap subtrees by exchanging the list of child nodes
         n1.children, n2.children = n2.children, n1.children
         # Ensure max_depth constraint is not violated

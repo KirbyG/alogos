@@ -193,12 +193,15 @@ def random_genotype(grammar, parameters, default_parameters, representation, map
     # Parameter extraction
     gl = _get_given_or_default("genotype_length", parameters, default_parameters)
     cs = _get_given_or_default("codon_size", parameters, default_parameters)
+    
+    seed = _get_given_or_default("seed", parameters, default_parameters)
+    rng = _random.Random(seed) # Random(None) creates an unseeded generator (default)
 
     # Transformation
     try:
         assert cs > 0
         max_int = 2**cs - 1
-        random_genotype = [_random.randint(0, max_int) for _ in range(gl)]
+        random_genotype = [rng.randint(0, max_int) for _ in range(gl)]
     except Exception:
         _exceptions.raise_init_ind_rand_gt_error()
 

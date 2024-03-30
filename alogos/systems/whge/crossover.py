@@ -4,7 +4,7 @@ from .. import _shared
 from . import representation as _representation
 
 
-def two_point_length_preserving(grammar, genotype1, genotype2, parameters=None):
+def two_point_length_preserving(grammar, genotype1, genotype2, parameters):
     """Generate new WHGE genotypes by exchanging sequence parts.
 
     Select two random, but equally long subsequences in the two

@@ -1,6 +1,5 @@
 """Data structure for a evolutionary algorithm that uses G3P systems."""
 
-import random as _random
 from numbers import Number as _Number
 
 import pylru as _pylru

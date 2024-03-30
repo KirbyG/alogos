@@ -12,6 +12,7 @@ default_parameters = _ParameterCollection(
         "max_expansions": 1_000_000,
         # Reverse mapping
         "codon_randomization": True,
+        "seed": None,
         # Individual initialization
         "init_ind_operator": "random_genotype",
         "init_ind_given_genotype": None,

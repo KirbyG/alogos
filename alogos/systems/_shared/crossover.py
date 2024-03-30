@@ -1,7 +1,5 @@
 """Shared crossover functions for several systems."""
 
-from random import randint as _ri
-
 from ... import exceptions as _exceptions
 
 
@@ -51,11 +49,11 @@ def two_point_length_preserving(grammar, gt1, gt2, parameters, representation):
         _exceptions.raise_crossover_lp_error2()
 
     # Get a random segment in genotype 1: choose two valid random points
-    s1, e1 = _get_two_different_points(l1)
+    s1, e1 = _get_two_different_points(l1, parameters)
 
     # Get a random segment in genotype 2: choose a valid start position for a same-sized segment
     lseg = e1 - s1
-    s2 = _ri(0, l2 - lseg)
+    s2 = parameters["rng"].randint(0, l2 - lseg)
     e2 = s2 + lseg
 
     # Crossover: Swap two randomly positioned, but equally long segments
@@ -64,11 +62,11 @@ def two_point_length_preserving(grammar, gt1, gt2, parameters, representation):
     return _GT(n1), _GT(n2)
 
 
-def _get_two_different_points(n):
+def _get_two_different_points(n, parameters):
     """Get two different numbers between 0 and n-1 to use as indices."""
     while True:
-        p1 = _ri(0, n)
-        p2 = _ri(0, n)
+        p1 = parameters["rng"].randint(0, n)
+        p2 = parameters["rng"].randint(0, n)
         if p1 == p2:
             continue
         if (p1 == 0 and p2 == n) or (p1 == n and p2 == 0):

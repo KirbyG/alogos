@@ -1,7 +1,5 @@
 """Crossover functions for CFG-GP-ST."""
 
-import random as _random
-
 from ..._utilities.parametrization import get_given_or_default as _get_given_or_default
 from . import default_parameters as _default_parameters
 from . import representation as _representation
@@ -10,10 +8,9 @@ from . import representation as _representation
 # Shortcuts for minor speedup
 _GT = _representation.Genotype
 _fe = _representation._find_subtree_end
-_rc = _random.choice
 
 
-def subtree_exchange(grammar, genotype1, genotype2, parameters=None):
+def subtree_exchange(grammar, genotype1, genotype2, parameters):
     """Generate new CFG-GP-ST genotypes by exchanging suitable subtrees.
 
     Randomly select nodes containing the same nonterminal in two trees
@@ -89,6 +86,7 @@ def subtree_exchange(grammar, genotype1, genotype2, parameters=None):
 
     # Parameter extraction
     mn = _get_given_or_default("max_nodes", parameters, _default_parameters)
+    rng = _get_given_or_default("rng", parameters, default_parameters)
 
     # Crossover
     s1, c1 = genotype1.data
@@ -97,11 +95,11 @@ def subtree_exchange(grammar, genotype1, genotype2, parameters=None):
     nb = {s for s in s2 if s in n1}  # set of nonterminals in both trees
     if nb:
         # - Randomly select a nonterminal in tree 1, which is also present in tree 2
-        a1 = _rc([i for i, s in enumerate(s1) if s in nb])
+        a1 = rng.choice([i for i, s in enumerate(s1) if s in nb])
         b1 = _fe(a1, c1) + 1
         # - Randomly select the same nonterminal at some position in tree 2
         sym = s1[a1]
-        a2 = _rc([i for i, s in enumerate(s2) if s == sym])
+        a2 = rng.choice([i for i, s in enumerate(s2) if s == sym])
         b2 = _fe(a2, c2) + 1
         # - Swap: only if max_nodes condition is not violated afterwards for both trees
         l1 = b1 - a1
