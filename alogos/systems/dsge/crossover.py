@@ -65,7 +65,6 @@ def gene_swap(grammar, genotype1, genotype2, parameters=None):
     repair = _get_given_or_default(
         "repair_after_crossover", parameters, _default_parameters
     )
-    rng = _get_given_or_default("rng", parameters, default_parameters)
 
     # Argument processing
     if not isinstance(genotype1, _GT):
@@ -77,7 +76,7 @@ def gene_swap(grammar, genotype1, genotype2, parameters=None):
     d1 = genotype1.data
     d2 = genotype2.data
     vals = (True, False)
-    mask = [rng.choice(vals) for _ in range(len(d1))]
+    mask = [grammar.rng.choice(vals) for _ in range(len(d1))]
     n1 = tuple(d1[i] if x else d2[i] for i, x in enumerate(mask))
     n2 = tuple(d2[i] if x else d1[i] for i, x in enumerate(mask))
 

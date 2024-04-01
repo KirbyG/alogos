@@ -86,7 +86,6 @@ def subtree_exchange(grammar, genotype1, genotype2, parameters):
 
     # Parameter extraction
     mn = _get_given_or_default("max_nodes", parameters, _default_parameters)
-    rng = _get_given_or_default("rng", parameters, default_parameters)
 
     # Crossover
     s1, c1 = genotype1.data
@@ -95,11 +94,11 @@ def subtree_exchange(grammar, genotype1, genotype2, parameters):
     nb = {s for s in s2 if s in n1}  # set of nonterminals in both trees
     if nb:
         # - Randomly select a nonterminal in tree 1, which is also present in tree 2
-        a1 = rng.choice([i for i, s in enumerate(s1) if s in nb])
+        a1 = grammar.rng.choice([i for i, s in enumerate(s1) if s in nb])
         b1 = _fe(a1, c1) + 1
         # - Randomly select the same nonterminal at some position in tree 2
         sym = s1[a1]
-        a2 = rng.choice([i for i, s in enumerate(s2) if s == sym])
+        a2 = grammar.rng.choice([i for i, s in enumerate(s2) if s == sym])
         b2 = _fe(a2, c2) + 1
         # - Swap: only if max_nodes condition is not violated afterwards for both trees
         l1 = b1 - a1

@@ -1,7 +1,5 @@
 """Mutation functions for WHGE."""
 
-import random as _random
-
 from ..._utilities.parametrization import get_given_or_default as _get_given_or_default
 from . import default_parameters as _dp
 from . import representation as _representation
@@ -83,7 +81,7 @@ def bit_flip_by_probability(grammar, genotype, parameters=None):
     # Mutation: For each bit decide randomly whether it is flipped
     data = genotype.data.copy()
     for i in range(len(data)):
-        if _random.random() < probability:
+        if grammar.rng.random() < probability:
             data[i] = not data[i]
     return _representation.Genotype(data)
 
@@ -103,7 +101,7 @@ def bit_flip_by_count(grammar, genotype, parameters=None):
     if flip_count > num_pos:
         positions = range(num_pos)
     else:
-        positions = _random.sample(range(num_pos), flip_count)
+        positions = grammar.rng.sample(range(num_pos), flip_count)
     for i in positions:
         data[i] = not data[i]
     return _representation.Genotype(data)

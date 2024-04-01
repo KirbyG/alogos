@@ -13,7 +13,7 @@ _NT = _grammar.data_structures.NonterminalSymbol
 _T = _grammar.data_structures.TerminalSymbol
 
 
-def int_replacement(grammar, genotype, parameters=None):
+def int_replacement(grammar, genotype, parameters):
     """Systematically change a chosen number of int codons.
 
     Parameters
@@ -78,7 +78,7 @@ def int_replacement(grammar, genotype, parameters=None):
 
     # Generate combinations of choices
     combinations = _shared.neighborhood.generate_combinations(
-        num_choices_per_pos, distance, max_size
+        num_choices_per_pos, distance, max_size, parameters
     )
 
     # Construct neighborhood genotypes from combinations

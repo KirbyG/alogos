@@ -969,7 +969,7 @@ class EvolutionaryAlgorithm:
         n = len(parent_population)
         while len(crossed_over_individuals) < n:
             if n > 2:
-                parent0, parent1 = _random.sample(parent_population.individuals, 2)
+                parent0, parent1 = pr["rng"].sample(parent_population.individuals, 2)
             elif n == 2:
                 parent0, parent1 = parent_population.individuals
             else:

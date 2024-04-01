@@ -3,10 +3,9 @@
 import functools as _functools
 import itertools as _itertools
 import operator as _operator
-import random as _random
 
 
-def generate_combinations(num_choices_per_pos, distance, max_size=None):
+def generate_combinations(num_choices_per_pos, distance, parameters, max_size=None):
     """Generate all combinations of choices available at each position.
 
     In each returned combination, the value 0 means that the original choice
@@ -59,6 +58,7 @@ def generate_combinations(num_choices_per_pos, distance, max_size=None):
             max_size,
             count,
             count_per_pos_comb,
+            parameters
         )
     else:
         # If no, generate the entire set
@@ -75,11 +75,11 @@ def _product(iterable):
 
 
 def _generate_some_combinations(
-    choices_per_pos, pos_combinations, num_pos, max_size, count, count_per_pos_comb
+    choices_per_pos, pos_combinations, num_pos, max_size, count, count_per_pos_comb, parameters
 ):
     """Generate a random subset of all possible combinations."""
     # Choose random neighbors by selecting indices from the enumerated possibilities
-    chosen = sorted(_random.sample(range(count), max_size))
+    chosen = sorted(parameters["rng"].sample(range(count), max_size))
 
     # Construct the chosen neighbors
     if chosen:

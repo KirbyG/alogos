@@ -1,7 +1,5 @@
 """Mutation functions for DSGE."""
 
-import random as _random
-
 from ..._utilities.parametrization import get_given_or_default as _get_given_or_default
 from . import _cached_calculations
 from . import default_parameters as _dp
@@ -79,7 +77,7 @@ def int_replacement_by_probability(grammar, genotype, parameters=None):
     # Mutation: Randomly decide for each positions in the genotype whether it shall be modified
     data = genotype.data
     num_pos = sum(len(data[gi]) for gi in mutable_genes)
-    pos = set(i for i in range(num_pos) if _random.random() < probability)
+    pos = set(i for i in range(num_pos) if grammar.rng.random() < probability)
     data = _change_chosen_positions(
         data,
         pos,
@@ -89,6 +87,7 @@ def int_replacement_by_probability(grammar, genotype, parameters=None):
         non_recursive_rhs,
         nt_to_num_options,
         mutable_genes,
+        grammar,
     )
 
     # Optional repair of the new genotype
@@ -146,7 +145,7 @@ def int_replacement_by_count(grammar, genotype, parameters=None):
     num_pos = sum(len(data[gi]) for gi in mutable_genes)
     pos = range(num_pos)
     if num_pos > flip_count:
-        pos = _random.sample(pos, flip_count)
+        pos = grammar.rng.sample(pos, flip_count)
     pos = set(pos)
     data = _change_chosen_positions(
         data,
@@ -157,6 +156,7 @@ def int_replacement_by_count(grammar, genotype, parameters=None):
         non_recursive_rhs,
         nt_to_num_options,
         mutable_genes,
+        grammar,
     )
 
     # Optional repair of the new genotype (either here and/or later)
@@ -176,6 +176,7 @@ def _change_chosen_positions(
     non_recursive_rhs,
     nt_to_num_options,
     mutable_genes,
+    grammar,
 ):
     """Mutate the selected positions by replacing the integer with another valid option.
 
@@ -205,12 +206,12 @@ def _change_chosen_positions(
     ):  # Note: >= is used in the original authors' implementation
 
         def get_new_codon(nt, codon):
-            return _random.choice([x for x in non_recursive_rhs[nt] if x != codon])
+            return grammar.rng.choice([x for x in non_recursive_rhs[nt] if x != codon])
 
     else:
 
         def get_new_codon(nt, codon):
-            return _random.choice(
+            return grammar.rng.choice(
                 [x for x in range(nt_to_num_options[nt]) if x != codon]
             )
 

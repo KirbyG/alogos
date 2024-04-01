@@ -1,7 +1,5 @@
 """Forward and reverse mapping functions for GE."""
 
-import random as _random
-
 from ... import _grammar
 from ... import exceptions as _exceptions
 from ..._utilities.parametrization import get_given_or_default as _get_given_or_default
@@ -365,7 +363,7 @@ def reverse(
             _exceptions.raise_limited_codon_size_error(chosen_rule_idx, max_int)
         if codon_randomization:
             options = range(chosen_rule_idx, max_int + 1, len(rules))
-            chosen_rule_idx = _random.choice(options)
+            chosen_rule_idx = grammar.rng.choice(options)
 
         # 3) Expand the chosen nonterminal with the rhs of the chosen rule -> Follow the expansion
         new_nt_nodes = [

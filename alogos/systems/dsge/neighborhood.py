@@ -13,7 +13,7 @@ from . import representation as _representation
 _T = _grammar.data_structures.TerminalSymbol
 
 
-def int_replacement(grammar, genotype, parameters=None):
+def int_replacement(grammar, genotype, parameters):
     """Change systematically chosen integers."""
     # Parameter extraction
     distance = _get_given_or_default(
@@ -39,7 +39,7 @@ def int_replacement(grammar, genotype, parameters=None):
 
     # Generate combinations
     combinations = _shared.neighborhood.generate_combinations(
-        num_choices_per_pos, distance, max_size
+        num_choices_per_pos, distance, max_size, parameters
     )
 
     # Construct neighborhood genotypes from combinations

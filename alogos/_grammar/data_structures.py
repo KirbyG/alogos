@@ -126,6 +126,7 @@ class Grammar:
         "production_rules",
         "start_symbol",
         "_cache",
+        "rng",
     )
 
     # Initialization and reset
@@ -245,6 +246,8 @@ class Grammar:
             > 1
         ):
             _warnings._warn_multiple_grammar_specs()
+
+        self.rng = kwargs.pop("rng", _random.Random())
 
         # Transformation
         if bnf_text is not None:
@@ -2560,7 +2563,7 @@ class DerivationTree:
             derivation = [[self.root_node]]
             stack = [self.root_node]
             while stack:
-                idx = _random.randint(0, len(stack) - 1)
+                idx = rng.randint(0, len(stack) - 1)
                 nt_node = stack.pop(idx)
                 derivation = next_derivation_step(derivation, nt_node, nt_node.children)
                 new_nt_nodes = [node for node in nt_node.children if node.children]

@@ -6,7 +6,7 @@ from . import default_parameters as _default_parameters
 from . import representation as _representation
 
 
-def bit_flip(grammar, genotype, parameters=None):
+def bit_flip(grammar, genotype, parameters):
     """Generate nearby genotypes by flipping n bits.
 
     Parameters
@@ -44,7 +44,7 @@ def bit_flip(grammar, genotype, parameters=None):
 
     # Generate combinations
     combinations = _shared.neighborhood.generate_combinations(
-        num_choices_per_pos, distance, max_size
+        num_choices_per_pos, distance, max_size, parameters
     )
     for comb in combinations:
         print(" ", comb)

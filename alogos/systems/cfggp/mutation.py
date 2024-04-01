@@ -1,7 +1,5 @@
 """Mutation functions for CFG-GP."""
 
-import random as _random
-
 from ..._grammar import data_structures as _data_structures
 from ..._utilities.parametrization import get_given_or_default as _get_given_or_default
 from .._shared import _cached_calculations
@@ -59,7 +57,7 @@ def subtree_replacement(grammar, genotype, parameters=None):
             nodes_and_depths.append((node, depth))
             stack = stack + [(node, depth + 1) for node in node.children]
     # - Randomly select a node for mutation
-    node, depth = _random.choice(nodes_and_depths)
+    node, depth = grammar.rng.choice(nodes_and_depths)
     # - Replace the node's subtree with a randomly generated new one
     node.children = []
     _grow_random_subtree(grammar, max_depth, start_depth=depth, root_node=node)
@@ -85,7 +83,7 @@ def _grow_random_subtree(grammar, max_depth, start_depth, root_node):
         rules = _filter_rules_for_grow(
             chosen_nt_node.symbol, rules, depth, max_depth, min_depths
         )
-        chosen_rule_idx = _random.randint(0, len(rules) - 1)
+        chosen_rule_idx = grammar.rng.randint(0, len(rules) - 1)
         chosen_rule = rules[chosen_rule_idx]
         # 3) Expand the chosen nonterminal with the rhs of the chosen rule
         new_nodes = dt._expand(chosen_nt_node, chosen_rule)

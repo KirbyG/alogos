@@ -1,7 +1,5 @@
 """Mutation functions for CFG-GP-ST."""
 
-import random as _random
-
 from ..._utilities.parametrization import get_given_or_default as _get_given_or_default
 from .. import _shared
 from . import _cached_calculations
@@ -12,9 +10,6 @@ from . import representation as _representation
 # Shortcuts for minor speedup
 _GT = _representation.Genotype
 _fe = _representation._find_subtree_end
-_rc = _random.choice
-_ri = _random.randint
-_rs = _random.shuffle
 
 
 def subtree_replacement(grammar, genotype, parameters=None):
@@ -71,7 +66,7 @@ def subtree_replacement(grammar, genotype, parameters=None):
     # Mutation
     # - Random choice of a nonterminal to mutate
     s1, c1 = genotype.data
-    a1 = _rc([i for i, c in enumerate(c1) if c])  # choose idx of a random nonterminal
+    a1 = grammar.rng.choice([i for i, c in enumerate(c1) if c])  # choose idx of a random nonterminal
     b1 = _fe(a1, c1) + 1  # find idx of last symbol in its subtree
     # - Grow a random new subtree
     s2, c2 = _grow_random_subtree(grammar, s1[a1], mn - len(s1) + (b1 - a1))
@@ -106,11 +101,11 @@ def _grow_random_subtree(grammar, sym, max_nodes):
         try:
             # 1) Symbol is a nonterminal, therefore requires expansion and will have >0 children
             # Choose rule: randomly from those rules that do not lead over the wanted num nodes
-            rhs = _rc(_filter_rules(sy, ipr[sy], imn[sy], max_nodes - n))
+            rhs = grammar.rng.choice(_filter_rules(sy, ipr[sy], imn[sy], max_nodes - n))
             # Expand the nonterminal with the rhs of the chosen rule
             m = len(rhs)
             r = list(range(m))
-            _rs(r)
+            grammar.rng.shuffle(r)
             ret = [None] * m
             for i in r:
                 # Recursive call for each child in random order, return in original order (dfs)
