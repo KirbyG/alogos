@@ -230,7 +230,7 @@ def _sort_individuals(individuals, reverse=False):
 # Sampling algorithms: draw individuals from a population according to a probability distribution
 
 
-def _uniform_sampling_with_replacement(population, sample_size, paremeters):
+def _uniform_sampling_with_replacement(population, sample_size, parameters):
     """Uniform sampling with replacement."""
     selected_individuals = [parameters["rng"].choice(population) for _ in range(sample_size)]
     return selected_individuals

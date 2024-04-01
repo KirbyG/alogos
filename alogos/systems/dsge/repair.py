@@ -113,6 +113,7 @@ def fix_genotype(grammar, genotype, parameters=None, raise_errors=True):
                         max_depth,
                         nt_to_num_options,
                         non_recursive_rhs,
+                        grammar,
                     )
                 else:
                     chosen_rule_idx = _cached_calculations.get_first_valid_codon(
@@ -135,6 +136,7 @@ def fix_genotype(grammar, genotype, parameters=None, raise_errors=True):
                     max_depth,
                     nt_to_num_options,
                     non_recursive_rhs,
+                    grammar,
                 )
             else:
                 chosen_rule_idx = _cached_calculations.get_first_valid_codon(

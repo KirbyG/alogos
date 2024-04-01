@@ -1,7 +1,5 @@
 """Initialization functions to create a WHGE individual."""
 
-import random as _random
-
 from bitarray.util import int2ba as _int2ba
 
 from ... import exceptions as _exceptions
@@ -67,7 +65,7 @@ def random_genotype(grammar, parameters=None):
 
     # Transformation
     try:
-        rand_int = _random.getrandbits(gl)
+        rand_int = grammar.rng.getrandbits(gl)
         rand_bitstring = _int2ba(rand_int, gl)
         rand_genotype = _representation.Genotype(rand_bitstring)
     except Exception:

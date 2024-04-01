@@ -1,7 +1,5 @@
 """Forward and reverse mapping functions for piGE."""
 
-import random as _random
-
 from ... import _grammar
 from ... import exceptions as _exceptions
 from ..._utilities import argument_processing as _ap
@@ -410,7 +408,7 @@ def reverse(
         elif derivation_order == "rightmost":
             chosen_nt_idx_tlo = len(stack_tlo) - 1
         elif derivation_order == "random":
-            chosen_nt_idx_tlo = _random.randint(0, len(stack_tlo) - 1)
+            chosen_nt_idx_tlo = grammar.rng.randint(0, len(stack_tlo) - 1)
         chosen_nt_node = stack_tlo.pop(chosen_nt_idx_tlo)
         chosen_nt_idx = stack.index(chosen_nt_node)
         chosen_nt_idx_stored = chosen_nt_idx
@@ -419,7 +417,7 @@ def reverse(
             _exceptions.raise_limited_codon_size_error(chosen_nt_idx, max_int)
         if codon_randomization:
             options = range(chosen_nt_idx, max_int + 1, len(stack) + 1)
-            chosen_nt_idx_stored = _random.choice(options)
+            chosen_nt_idx_stored = grammar.rng.choice(options)
 
         # 2) Choose rule: piGE decides via next "content codon" -> Deduce it from tree
         try:
@@ -435,7 +433,7 @@ def reverse(
             _exceptions.raise_limited_codon_size_error(chosen_rule_idx, max_int)
         if codon_randomization:
             options = range(chosen_rule_idx, max_int + 1, len(rules))
-            chosen_rule_idx = _random.choice(options)
+            chosen_rule_idx = grammar.rng.choice(options)
 
         # 3) Expand the chosen nonterminal with the rhs of the chosen rule -> Follow the expansion
         new_nt_nodes = [

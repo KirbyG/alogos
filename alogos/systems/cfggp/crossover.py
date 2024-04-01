@@ -72,7 +72,6 @@ def subtree_exchange(grammar, genotype1, genotype2, parameters):
     """
     # Parameter extraction
     max_depth = _get_given_or_default("max_depth", parameters, _default_parameters)
-    rng = _get_given_or_default("rng", parameters, _default_parameters)
 
     # Argument processing
     if not isinstance(genotype1, _representation.Genotype):
@@ -88,10 +87,10 @@ def subtree_exchange(grammar, genotype1, genotype2, parameters):
     si = s1.intersection(s2)
     if si:
         # Randomly select a non-terminal in the first tree, which is also part of second tree
-        n1 = rng.choice([n for n in ns1 if n.symbol.text in si])
+        n1 = grammar.rng.choice([n for n in ns1 if n.symbol.text in si])
         t1 = n1.symbol.text
         # Randomly select the same non-terminal in the second genotype
-        n2 = rng.choice([n for n in ns2 if n.symbol.text == t1])
+        n2 = grammar.rng.choice([n for n in ns2 if n.symbol.text == t1])
         # Swap subtrees by exchanging the list of child nodes
         n1.children, n2.children = n2.children, n1.children
         # Ensure max_depth constraint is not violated

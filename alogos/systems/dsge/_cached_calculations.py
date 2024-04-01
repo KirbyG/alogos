@@ -1,5 +1,3 @@
-import random as _random
-
 from ... import _grammar
 
 
@@ -63,14 +61,14 @@ def get_first_valid_codon(
 
 
 def get_random_valid_codon(
-    nt, current_depth, max_depth, nt_to_num_options, non_recursive_rhs
+    nt, current_depth, max_depth, nt_to_num_options, non_recursive_rhs, grammar
 ):
-    """Get a random valid codons depending on current and max depth."""
+    """Get a random valid codon depending on current and max depth."""
     # Used in stochastic repair mechanism
     options = get_all_valid_codons(
         nt, current_depth, max_depth, nt_to_num_options, non_recursive_rhs
     )
-    return _random.choice(options)
+    return grammar.rng.choice(options)
 
 
 def get_tree_depth(grammar, genotype, nt_to_gene, nt_to_cnt):

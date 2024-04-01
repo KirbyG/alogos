@@ -53,7 +53,7 @@ def two_point_length_preserving(grammar, gt1, gt2, parameters, representation):
 
     # Get a random segment in genotype 2: choose a valid start position for a same-sized segment
     lseg = e1 - s1
-    s2 = parameters["rng"].randint(0, l2 - lseg)
+    s2 = grammar.rng.randint(0, l2 - lseg)
     e2 = s2 + lseg
 
     # Crossover: Swap two randomly positioned, but equally long segments
@@ -65,8 +65,8 @@ def two_point_length_preserving(grammar, gt1, gt2, parameters, representation):
 def _get_two_different_points(n, parameters):
     """Get two different numbers between 0 and n-1 to use as indices."""
     while True:
-        p1 = parameters["rng"].randint(0, n)
-        p2 = parameters["rng"].randint(0, n)
+        p1 = grammar.rng.randint(0, n)
+        p2 = grammar.rng.randint(0, n)
         if p1 == p2:
             continue
         if (p1 == 0 and p2 == n) or (p1 == n and p2 == 0):

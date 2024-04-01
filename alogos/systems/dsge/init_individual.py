@@ -161,6 +161,7 @@ def random_genotype(grammar, parameters=None):
                     init_max_depth,
                     nt_to_num_options,
                     non_recursive_rhs,
+                    grammar,
                 )
             chosen_rule = rules[chosen_rule_idx]
             genotype[gene_idx].append(chosen_rule_idx)

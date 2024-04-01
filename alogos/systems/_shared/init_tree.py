@@ -2,7 +2,6 @@
 
 import copy as _copy
 import itertools as _itertools
-import random as _random
 
 from ... import exceptions as _exceptions
 from ..._grammar import data_structures as _data_structures
@@ -59,7 +58,7 @@ def uniform(grammar, max_expansions=10_000):
         # 2) Choose rule: randomly
         rules = grammar.production_rules[chosen_nt_node.symbol]
         if len(rules) > 1:
-            chosen_rule_idx = _random.randint(0, len(rules) - 1)
+            chosen_rule_idx = grammar.rng.randint(0, len(rules) - 1)
         else:
             chosen_rule_idx = 0
         chosen_rule = rules[chosen_rule_idx]
@@ -123,7 +122,7 @@ def weighted(grammar, max_expansions=10_000, reduction_factor=0.96):
     def weighted_choice(lhs, weights):
         rhs_list = grammar.production_rules[lhs]
         weight_list = weights[lhs]
-        chosen_rule_cumulative_weight = sum(weight_list) * _random.random()
+        chosen_rule_cumulative_weight = sum(weight_list) * grammar.rng.random()
         chosen_rule_idx = 0
         for cumulative_weight in _itertools.accumulate(weight_list):
             if cumulative_weight >= chosen_rule_cumulative_weight:
@@ -207,7 +206,7 @@ def ptc2(grammar, max_expansions=100):
     expansions = 0
     while stack:
         # 1) Choose nonterminal: random
-        chosen_nt_idx = _random.choice(range(len(stack)))
+        chosen_nt_idx = grammar.rng.choice(range(len(stack)))
         chosen_nt_node = stack.pop(chosen_nt_idx)
         # 2) Choose rule: randomly from those that do not lead over the wanted expansions
         rules = grammar.production_rules[chosen_nt_node.symbol]
@@ -222,7 +221,7 @@ def ptc2(grammar, max_expansions=100):
             min_expansions_per_symbol,
             stack,
         )
-        chosen_rule_idx = _random.randint(0, len(rules) - 1)
+        chosen_rule_idx = grammar.rng.randint(0, len(rules) - 1)
         chosen_rule = rules[chosen_rule_idx]
         # 3) Expand the chosen nonterminal with the rhs of the chosen rule
         new_nodes = dt._expand(chosen_nt_node, chosen_rule)
@@ -267,7 +266,7 @@ def grow_one_branch_to_max_depth(grammar, max_depth=20):
     stack = [(dt.root_node, 0)]
     while stack:
         # 1) Choose nonterminal: random
-        chosen_nt_idx = _random.choice(range(len(stack)))
+        chosen_nt_idx = grammar.rng.choice(range(len(stack)))
         chosen_nt_node, depth = stack.pop(chosen_nt_idx)
         # 2) Choose rule: randomly from those that do not lead over the wanted depth
         rules = grammar.production_rules[chosen_nt_node.symbol]
@@ -288,7 +287,7 @@ def grow_one_branch_to_max_depth(grammar, max_depth=20):
             rules = _filter_rules_for_grow(
                 chosen_nt_node.symbol, rules, depth, max_depth, min_depths
             )
-        chosen_rule_idx = _random.randint(0, len(rules) - 1)
+        chosen_rule_idx = grammar.rng.randint(0, len(rules) - 1)
         chosen_rule = rules[chosen_rule_idx]
         # 3) Expand the chosen nonterminal with the rhs of the chosen rule
         new_nodes = dt._expand(chosen_nt_node, chosen_rule)
@@ -333,7 +332,7 @@ def grow_all_branches_within_max_depth(grammar, max_depth=20):
         rules = _filter_rules_for_grow(
             chosen_nt_node.symbol, rules, depth, max_depth, min_depths
         )
-        chosen_rule_idx = _random.randint(0, len(rules) - 1)
+        chosen_rule_idx = grammar.rng.randint(0, len(rules) - 1)
         chosen_rule = rules[chosen_rule_idx]
         # 3) Expand the chosen nonterminal with the rhs of the chosen rule
         new_nodes = dt._expand(chosen_nt_node, chosen_rule)
@@ -381,7 +380,7 @@ def grow_all_branches_to_max_depth(grammar, max_depth=20):
         rules = _filter_rules_for_full(
             chosen_nt_node.symbol, rules, depth, max_depth, min_depths, is_recursive
         )
-        chosen_rule_idx = _random.randint(0, len(rules) - 1)
+        chosen_rule_idx = grammar.rng.randint(0, len(rules) - 1)
         chosen_rule = rules[chosen_rule_idx]
         # 3) Expand the chosen nonterminal with the rhs of the chosen rule
         new_nodes = dt._expand(chosen_nt_node, chosen_rule)
