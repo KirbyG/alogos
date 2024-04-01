@@ -41,6 +41,16 @@ def delete_file(filepath):
     """
     _os.remove(filepath)
 
+def ensure_new_path_2(path):
+    while _os.path.exists(path):
+        root, ext = _os.path.splitext(path)
+        a, b, c = root.rpartition('_')
+        if c.isdecimal():
+            c = str(int(c) + 1)
+        else:
+            c = c + '_1'
+        path = a + b + c + ext
+    return path
 
 def ensure_new_path(path):
     """Check whether a given path exists. If yes, try to find a novel, incremented variant of it.
@@ -95,6 +105,7 @@ def ensure_new_path(path):
             path = base + str(int(num) + 1)
         else:
             path = path + "_1"
+    print(f'ensure_new_path returns {path}')
     return path
 
 
